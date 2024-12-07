@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Mahasiswa - E-Presensi</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.18/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script> <!-- Menambahkan SheetJS -->
+</head>
+<style>
+  /* Styling untuk tombol Buat PDF dan Simpan Data */
+  .action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 10px;
+    align-items: flex-end; /* Menempatkan tombol di sebelah kanan */
+  }
+
+  .action-buttons button {
+    padding: 6px 10px; /* Menyusutkan ukuran tombol */
+    font-size: 12px;  /* Ukuran font lebih kecil */
+    border-radius: 5px;
+    cursor: pointer;
+    min-width: 80px; /* Ukuran tombol tetap kecil */
+  }
+
+  .pdf-btn {
+    background-color: #007bff;
+    color: white;
+  }
+
+  .pdf-btn:hover {
+    background-color: #0056b3;
+  }
+
+  .save-btn {
+    background-color: #28a745;
+    color: white;
+  }
+
+  .save-btn:hover {
+    background-color: #218838;
+  }
+
+  /* Styling untuk tabel */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px; /* Menambahkan jarak bawah tabel */
+  }
+
+  table th, table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+  }
+
+  table th {
+    background-color: #f2f2f2;
+  }
+
+  /* Container data mahasiswa */
+  .data-mahasiswa-container {
+    padding-bottom: 80px; /* Menambahkan ruang di bawah tabel untuk tombol */
+  }
+</style>
+<body>
+  <nav class="navbar">
+    <div class="navbar-left">
+      <span class="logo">E-Presensi</span>
+    </div>
+    <div class="navbar-right">
+      <a href="dashboard.html"><button class="nav-btn">Kembali ke Dashboard</button></a>
+    </div>
+  </nav>
+
+  <!-- Data Mahasiswa -->
+  <div class="data-mahasiswa-container">
+    <h2>Data Mahasiswa</h2>
+    <table id="dataMahasiswaTable">
+      <thead>
+        <tr>
+          <th>Nama</th>
+          <th>NIM</th>
+          <th>Status Kehadiran</th>
+          <th>Hapus</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Data mahasiswa akan ditambahkan di sini -->
+      </tbody>
+    </table>
+
+    <!-- Tombol Buat PDF dan Simpan Data -->
+    <div class="action-buttons">
+      <button class="pdf-btn" onclick="buatPDF()">Buat PDF</button>
+      <button class="save-btn" onclick="simpanData()">Simpan Data</button> <!-- Tombol untuk simpan data -->
+    </div>
+  </div>
+
+  <script>
+    // Fungsi Logout
+    function logout() {
+      localStorage.removeItem('isLoggedIn');
+      window.location.href = 'index.html';
+    }
+
+    // Tampilkan Data Mahasiswa dan Status Kehadiran
+    window.onload = function() {
+      const dataMahasiswa = JSON.parse(localStorage.getItem('dataMahasiswa')) || [];
+      const tableBody = document.querySelector("#dataMahasiswaTable tbody");
+
+      // Clear tabel sebelum menambahkan data baru
+      tableBody.innerHTML = '';
+
+      // Masukkan setiap data mahasiswa ke dalam tabel
+      dataMahasiswa.forEach((mahasiswa, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${mahasiswa.nama}</td>
+          <td>${mahasiswa.nim}</td>
+          <td>
+            <label>
+              <input type="radio" name="status-${index}" id="hadir-${index}" ${mahasiswa.status === 'Hadir' ? 'checked' : ''} onchange="updateStatus(${index}, 'Hadir')">
+              Hadir
+            </label>
+            <label>
+              <input type="radio" name="status-${index}" id="alpa-${index}" ${mahasiswa.status === 'Alpa' ? 'checked' : ''} onchange="updateStatus(${index}, 'Alpa')">
+              Alpa
+            </label>
+          </td>
+          <td>
+            <button onclick="hapusMahasiswa(${index})">Hapus</button>
+          </td>
+        `;
+        tableBody.appendChild(row);
+      });
+    };
+
+    // Update Status Kehadiran
+    function updateStatus(index, status) {
+      const dataMahasiswa = JSON.parse(localStorage.getItem('dataMahasiswa')) || [];
+      dataMahasiswa[index].status = status;
+      localStorage.setItem('dataMahasiswa', JSON.stringify(dataMahasiswa));
+    }
+
+    // Hapus Mahasiswa
+    function hapusMahasiswa(index) {
+      let dataMahasiswa = JSON.parse(localStorage.getItem('dataMahasiswa')) || [];
+      dataMahasiswa.splice(index, 1);
+      localStorage.setItem('dataMahasiswa', JSON.stringify(dataMahasiswa));
+      window.onload(); // Reload data setelah penghapusan
+    }
+
+    // Fungsi untuk membuat PDF
+    function buatPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const dataMahasiswa = JSON.parse(localStorage.getItem('dataMahasiswa')) || [];
+
+      doc.setFontSize(18);
+      doc.text('Data Mahasiswa - E-Presensi', 14, 10);
+
+      // Membuat tabel PDF
+      const tableColumn = ['Nama', 'NIM', 'Status Kehadiran'];
+      const tableRows = [];
+
+      dataMahasiswa.forEach(mahasiswa => {
+        const status = mahasiswa.status === 'Hadir' ? 'Hadir' : 'Alpa';
+        tableRows.push([mahasiswa.nama, mahasiswa.nim, status]);
+      });
+
+      // Menambahkan tabel ke PDF
+      doc.autoTable({
+        head: [tableColumn],
+        body: tableRows,
+        startY: 20, // Posisi Y untuk mulai menulis tabel
+        theme: 'grid', // Tabel dengan grid
+        headStyles: { fillColor: [0, 0, 255], textColor: [255, 255, 255] },
+        margin: { top: 20 },
+        styles: { fontSize: 10 },
+      });
+
+      // Simpan PDF
+      doc.save('data_mahasiswa.pdf');
+    }
+
+    // Fungsi untuk menyimpan data ke Excel
+    function simpanData() {
+      const dataMahasiswa = JSON.parse(localStorage.getItem('dataMahasiswa')) || [];
+
+      // Menyusun data untuk file Excel
+      const wb = XLSX.utils.book_new();
+      
+      // Menyusun array data dengan header kolom yang sesuai
+      const ws_data = [
+        ["Nama", "NIM", "Status Kehadiran"] // Header tabel
+      ];
+
+      // Menambahkan data mahasiswa ke dalam array ws_data
+      dataMahasiswa.forEach(mahasiswa => {
+        ws_data.push([mahasiswa.nama, mahasiswa.nim, mahasiswa.status]);
+      });
+
+      // Membuat worksheet dengan data mahasiswa
+      const ws = XLSX.utils.aoa_to_sheet(ws_data);
+
+      // Menambahkan worksheet ke dalam workbook
+      XLSX.utils.book_append_sheet(wb, ws, "Data Mahasiswa");
+
+      // Simpan file Excel
+      XLSX.writeFile(wb, "data_mahasiswa.xlsx");
+    }
+  </script>
+</body>
+</html>

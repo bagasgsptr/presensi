@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - E-Presensi</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background-color: #bbcbdc;
+    }
+    /* Gaya untuk sidebar */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 250px;
+      height: 100%;
+      background-color: rgb(186, 211, 236);
+      box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+      display: none; /* Awalnya disembunyikan */
+      flex-direction: column;
+      padding: 20px;
+      box-sizing: border-box;
+      z-index: 1001; /* Pastikan di atas elemen lainnya */
+    }
+
+    .sidebar.show {
+      display: flex; /* Tampilkan ketika diaktifkan */
+    }
+
+    .sidebar .nav-btn {
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: left;
+      margin-bottom: 15px; /* Jarak antar tombol */
+    }
+
+    .sidebar .nav-btn:hover {
+      background-color: #0056b3;
+    }
+
+    /* Tombol toggle kecil di kanan atas */
+    .toggle-sidebar {
+      position: fixed; /* Tetap di posisi tetap saat scrolling */
+      top: 50px; /* Jarak dari atas */
+      right: 20px; /* Jarak dari kanan */
+      background-color: #007bff; /* Warna biru */
+      color: white; /* Warna teks putih */
+      border: none; /* Tanpa border */
+      border-radius: 50%; /* Membuat bentuk lingkaran */
+      width: 50px; /* Lebar tombol */
+      height: 50px; /* Tinggi tombol */
+      font-size: 20px; /* Ukuran teks/icon */
+      display: flex; /* Untuk mengatur konten tombol */
+      justify-content: center; /* Konten di tengah horizontal */
+      align-items: center; /* Konten di tengah vertikal */
+      cursor: pointer; /* Pointer kursor */
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Bayangan */
+      z-index: 1002; /* Pastikan tombol tetap di atas elemen lainnya */
+    }
+
+    .toggle-sidebar.hidden {
+      display: none; /* Sembunyikan tombol */
+    }
+
+    .toggle-sidebar:hover {
+      background-color: #0056b3; /* Warna biru lebih gelap saat hover */
+    }
+
+    /* Overlay untuk klik sembarang */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+      display: none; /* Awalnya disembunyikan */
+      z-index: 1000; /* Pastikan di bawah sidebar */
+    }
+
+    .overlay.show {
+      display: block; /* Tampilkan overlay */
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-left">
+      <span class="logo">E-Presensi</span>
+    </div>
+  </nav>
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <a href="mahasiswa.html"><button class="nav-btn">Lihat Data Mahasiswa</button></a>
+    <button class="nav-btn" onclick="logout()">Logout</button>
+  </div>
+
+  <!-- Tombol Toggle Sidebar -->
+  <button class="toggle-sidebar" id="toggleButton" onclick="toggleSidebar()">☰</button>
+
+  <!-- Overlay -->
+  <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+  <!-- Dashboard Content -->
+  <div class="dashboard-container">
+    <h2>Dashboard</h2>
+    <p>Selamat datang di Dashboard E-Presensi! Di sini Anda dapat melihat riwayat presensi dan mengelola data.</p>
+    
+    <!-- Form Input Data Mahasiswa -->
+    <div class="input-mahasiswa">
+      <h3>Input Data Mahasiswa</h3>
+      <form id="mahasiswaForm" onsubmit="submitForm(event)">
+        <div class="form-group">
+          <label for="nama">Nama:</label>
+          <input type="text" id="nama" name="nama" placeholder="Masukkan Nama Mahasiswa" required>
+        </div>
+        <div class="form-group">
+          <label for="nim">NIM:</label>
+          <input type="text" id="nim" name="nim" placeholder="Masukkan NIM" required>
+        </div>
+        <button type="submit" class="form-btn">Simpan Data</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Fungsi untuk toggle sidebar
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      const toggleButton = document.getElementById('toggleButton');
+      
+      sidebar.classList.toggle('show');
+      overlay.classList.toggle('show');
+
+      // Sembunyikan tombol toggle jika sidebar muncul
+      if (sidebar.classList.contains('show')) {
+        toggleButton.classList.add('hidden');
+      }
+    }
+
+    // Fungsi untuk menutup sidebar
+    function closeSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      const toggleButton = document.getElementById('toggleButton');
+
+      sidebar.classList.remove('show');
+      overlay.classList.remove('show');
+
+      // Tampilkan tombol toggle kembali
+      toggleButton.classList.remove('hidden');
+    }
+
+    // Fungsi Logout
+    function logout() {
+      localStorage.removeItem('isLoggedIn');
+      window.location.href = 'index.html';
+    }
+
+    // Fungsi submit form
+    function submitForm(event) {
+      event.preventDefault(); // Menghindari reload halaman setelah submit
+
+      // Ambil data form
+      const nama = document.getElementById('nama').value;
+      const nim = document.getElementById('nim').value;
+
+      // Ambil data mahasiswa yang sudah ada dari localStorage
+      let dataMahasiswa = JSON.parse(localStorage.getItem('dataMahasiswa')) || [];
+
+      // Tambahkan data mahasiswa baru ke dalam array
+      dataMahasiswa.push({
+        nama: nama,
+        nim: nim,
+        status: 'alpa' // Status default adalah 'alpa'
+      });
+
+      // Simpan kembali data ke localStorage
+      localStorage.setItem('dataMahasiswa', JSON.stringify(dataMahasiswa));
+
+      // Reset form setelah disubmit
+      document.getElementById('mahasiswaForm').reset();
+    }
+    
+  </script>
+</body>
+</html>

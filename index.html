@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Presensi</title>
+  <link rel="icon" href="/img/4.png" type="image/png" sizes="64x64">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('/img/5.jfif'); /* Ganti dengan path gambar Anda */
+    background-size: auto; /* Mengatur ukuran gambar agar tetap kecil */
+    background-repeat: repeat; /* Mengulang gambar untuk menutupi seluruh latar belakang */
+    background-position: top left; /* Posisi awal gambar */
+    color: #333;
+    
+    /* Flexbox untuk memusatkan konten */
+    display: flex;
+    justify-content: center; /* Memusatkan secara horizontal */
+    align-items: center; /* Memusatkan secara vertikal */
+    height: 100vh; /* Menyusun body untuk mengambil seluruh tinggi viewport */
+}
+  </style>
+</head>
+<body>
+  
+  <div class="rain"></div> <!-- Background hujan -->
+  <div class="login-container">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <div class="input-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required>
+      </div>
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      <button type="submit">Login</button>
+    </form>
+    <p class="error-message" id="error-message"></p>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

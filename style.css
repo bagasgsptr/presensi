@@ -1,0 +1,402 @@
+/* General styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f7f7f7;
+    color: #333;
+  }
+  
+  h2, h3 {
+    color: #333;
+  }
+  
+  h1 {
+    text-align: center;
+    font-size: 24px;
+  }
+  
+  
+  /* Login page styles */
+  .login-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background-image: url(/img/7.jfif);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .login-container h2 {
+    text-align: center;
+    font-size: 22px;
+  }
+  
+  .input-group {
+    margin-bottom: 15px;
+  }
+  
+  /* Menambahkan warna hitam pada label */
+.input-group label {
+    display: block;
+    font-weight: bold;
+    color: #000; /* Menambahkan warna hitam pada teks label */
+}
+
+/* Mengatur warna teks input */
+.input-group input {
+    width: 380px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 5px;
+    color: #333; /* Mengatur warna teks input */
+}
+
+  
+  button {
+    width: 100%;
+    padding: 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  
+  .error-message {
+    color: red;
+    text-align: center;
+  }
+  
+  /* Navbar styles */
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #333;
+    color: white;
+  }
+  .navbar-left {
+    display: flex;
+    align-items: center;
+  }
+  .logo {
+    font-size: 20px;
+  }
+  .navbar-right {
+    position: relative;
+  }
+  .toggle-btn {
+    background-color: #444;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 20px; /* Ukuran panah */
+    border-radius: 5px;
+  }  
+  
+  .nav-btn {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  .navbar-left .logo {
+    font-size: 24px;
+  }
+  
+  .navbar-right button {
+    background-color: #f44336;
+    padding: 10px 20px;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  
+  .navbar-right button:hover {
+    background-color: #e53935;
+  }
+  
+  .navbar-right #userName {
+    margin-right: 20px;
+  }
+  
+  /* Dashboard Content */
+  .dashboard-container {
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .presensi-history table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .presensi-history table th, .presensi-history table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+  
+  .presensi-history table th {
+    background-color: #f2f2f2;
+  }
+  
+  .notification-box {
+    background-color: #e3f2fd;
+    padding: 20px;
+    margin-top: 30px;
+    border-radius: 8px;
+  }
+  
+  .notification-box h3 {
+    margin-top: 0;
+  }
+  
+  .notification-box ul {
+    padding-left: 20px;
+  }
+  
+  .notification-box ul li {
+    margin: 5px 0;
+  }
+  
+  /* Styling untuk halaman Data Mahasiswa */
+.mahasiswa-container {
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .mahasiswa-container table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .mahasiswa-container table th, .mahasiswa-container table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+  
+  .mahasiswa-container table th {
+    background-color: #f2f2f2;
+  }
+  
+  /* Style untuk navbar dan tombol di dalam navbar */
+  .navbar-right a button {
+    background-color: #4CAF50;
+    padding: 10px 20px;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .navbar-right a button:hover {
+    background-color: #45a049;
+  }
+  
+  .navbar-right button {
+    background-color: #f44336;
+    padding: 10px 20px;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .navbar-right button:hover {
+    background-color: #e53935;
+  }
+  
+/* Gaya Form Input */
+.input-mahasiswa {
+    margin-top: 20px;
+  }
+  
+  .input-mahasiswa form {
+    max-width: 400px; /* Batasi lebar formulir */
+    margin: 0 auto;
+  }
+  
+  .form-group {
+    margin-bottom: 15px; /* Jarak antar kolom input */
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px; /* Jarak antara label dan input */
+    font-weight: bold;
+  }
+  
+  input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+  
+  button.form-btn {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button.form-btn:hover {
+    background-color: #0056b3;
+  }
+  /* Styling untuk tombol Edit dan Hapus */
+button {
+    padding: 5px 10px;
+    margin-right: 10px; /* Memberikan jarak antar tombol */
+    border: none;
+    cursor: pointer;
+    background-color: #007BFF;
+    color: white;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  button.hapus-btn {
+    background-color: #dc3545; /* Warna merah untuk tombol Hapus */
+  }
+  
+  button.hapus-btn:hover {
+    background-color: #c82333;
+  }
+  
+  button.edit-btn {
+    background-color: #28a745; /* Warna hijau untuk tombol Edit */
+  }
+  
+  button.edit-btn:hover {
+    background-color: #218838;
+  }
+  .data-mahasiswa-container {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Styling untuk setiap kotak mahasiswa */
+    .mahasiswa-box {
+      border: 2px solid #007bff; /* Warna border biru */
+      padding: 15px;
+      border-radius: 10px; /* Sudut border melengkung */
+      background-color: #f9f9f9;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Menambahkan shadow */
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: transform 0.3s ease-in-out; /* Efek transisi saat hover */
+    }
+
+    /* Efek hover pada kotak mahasiswa */
+    .mahasiswa-box:hover {
+      transform: scale(1.05); /* Meningkatkan ukuran kotak saat hover */
+    }
+
+    .mahasiswa-box .info {
+      flex: 1;
+    }
+
+    .mahasiswa-box .status {
+      display: flex;
+      gap: 10px;
+    }
+
+    .status input {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Styling untuk tabel atau container header */
+    .navbar {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar .logo {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .navbar-right button {
+      background-color: #fff;
+      color: #007bff;
+      border: 1px solid #007bff;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .navbar-right button:hover {
+      background-color: #007bff;
+      color: white;
+    }
+    /* Tambahkan styling untuk tabel */
+#dataMahasiswaTable {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  #dataMahasiswaTable th, #dataMahasiswaTable td {
+    border: 1px solid #ddd; /* Border untuk tabel dan sel */
+    padding: 10px;
+    text-align: center;
+  }
+  
+  #dataMahasiswaTable th {
+    background-color: #f4f4f4;
+  }
+  
+  #dataMahasiswaTable td button {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  #dataMahasiswaTable td button:hover {
+    background-color: darkred;
+  }
+  
