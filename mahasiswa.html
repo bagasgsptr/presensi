@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Data Mahasiswa - E-Presensi</title>
+  <link rel="icon" href="/img/4.png" type="image/png" sizes="64x64">
   <link rel="stylesheet" href="style.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.18/jspdf.plugin.autotable.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script> <!-- Menambahkan SheetJS -->
 </head>
 <style>
   /* Styling untuk tombol Buat PDF dan Simpan Data */
@@ -86,7 +86,7 @@
           <th>Nama</th>
           <th>NIM</th>
           <th>Status Kehadiran</th>
-          <th>Hapus</th>
+          <th>Aksi</th>
         </tr>
       </thead>
       <tbody>
@@ -97,7 +97,7 @@
     <!-- Tombol Buat PDF dan Simpan Data -->
     <div class="action-buttons">
       <button class="pdf-btn" onclick="buatPDF()">Buat PDF</button>
-      <button class="save-btn" onclick="simpanData()">Simpan Data</button> <!-- Tombol untuk simpan data -->
+      <button class="save-btn" onclick="simpanData()">Simpan Data</button>
     </div>
   </div>
 
@@ -189,32 +189,41 @@
       doc.save('data_mahasiswa.pdf');
     }
 
-    // Fungsi untuk menyimpan data ke Excel
+    // Fungsi untuk menyimpan data dan pindah ke halaman kehadiran.html
     function simpanData() {
-      const dataMahasiswa = JSON.parse(localStorage.getItem('dataMahasiswa')) || [];
+  const dataMahasiswa = JSON.parse(localStorage.getItem('dataMahasiswa')) || [];
 
-      // Menyusun data untuk file Excel
-      const wb = XLSX.utils.book_new();
-      
-      // Menyusun array data dengan header kolom yang sesuai
-      const ws_data = [
-        ["Nama", "NIM", "Status Kehadiran"] // Header tabel
-      ];
+  if (dataMahasiswa.length > 0) {
+    // Menyimpan data kehadiran saat ini
+    localStorage.setItem('dataMahasiswa', JSON.stringify(dataMahasiswa));
 
-      // Menambahkan data mahasiswa ke dalam array ws_data
-      dataMahasiswa.forEach(mahasiswa => {
-        ws_data.push([mahasiswa.nama, mahasiswa.nim, mahasiswa.status]);
-      });
+    // Rekaman hasil kehadiran (Jika perlu disimpan)
+    const rekamanKehadiran = JSON.parse(localStorage.getItem('rekamanKehadiran')) || [];
+    const timestamp = new Date().toISOString();
 
-      // Membuat worksheet dengan data mahasiswa
-      const ws = XLSX.utils.aoa_to_sheet(ws_data);
+    // Menambahkan rekaman baru
+    rekamanKehadiran.push({
+      waktu: timestamp,
+      data: dataMahasiswa
+    });
 
-      // Menambahkan worksheet ke dalam workbook
-      XLSX.utils.book_append_sheet(wb, ws, "Data Mahasiswa");
+    // Simpan rekaman hasil ke localStorage
+    localStorage.setItem('rekamanKehadiran', JSON.stringify(rekamanKehadiran));
 
-      // Simpan file Excel
-      XLSX.writeFile(wb, "data_mahasiswa.xlsx");
-    }
+    // Reset status kehadiran mahasiswa setelah menyimpan
+    dataMahasiswa.forEach((mahasiswa, index) => {
+      mahasiswa.status = ''; // Reset status kehadiran
+    });
+    localStorage.setItem('dataMahasiswa', JSON.stringify(dataMahasiswa));
+
+    // Tampilkan notifikasi bahwa data berhasil disimpan
+    alert('Data berhasil disimpan! Status kehadiran telah direset.');
+    window.onload(); // Reload halaman untuk menampilkan status kehadiran yang sudah direset
+  } else {
+    alert('Tidak ada data untuk disimpan!');
+  }
+}
+
   </script>
 </body>
 </html>

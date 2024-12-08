@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Riwayat Kehadiran - E-Presensi</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<style>
+  /* Gaya untuk tabel riwayat kehadiran */
+  .table-container {
+    margin: 20px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+
+  table th, table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+  }
+
+  table th {
+    background-color: #f2f2f2;
+  }
+
+  .summary {
+    text-align: left;
+    line-height: 1.5; /* Memberikan jarak antar baris */
+  }
+
+  .no-data {
+    text-align: center;
+    font-size: 14px;
+    color: #888;
+  }
+
+  /* Gaya untuk tombol dengan efek soft */
+  .nav-btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Efek bayangan ringan */
+  }
+
+  .nav-btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.05); /* Sedikit pembesaran saat hover */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Efek bayangan lebih besar saat hover */
+  }
+
+  .nav-btn:active {
+    transform: scale(0.98); /* Efek mengecilkan saat tombol ditekan */
+    background-color: #004085; /* Warna lebih gelap saat ditekan */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Mengurangi bayangan saat ditekan */
+  }
+
+  .delete-btn {
+    padding: 5px 10px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+
+  .delete-btn:hover {
+    background-color: #c82333;
+    transform: scale(1.05);
+  }
+
+  .delete-btn:active {
+    transform: scale(0.98);
+    background-color: #bd2130;
+  }
+</style>
+<body>
+  <nav class="navbar">
+    <div class="navbar-left">
+      <span class="logo">E-Presensi</span>
+    </div>
+    <div class="navbar-right">
+      <a href="dashboard.html">
+        <button class="nav-btn">Kembali ke Dashboard</button>
+      </a>
+    </div>
+  </nav>
+
+  <div class="table-container">
+    <h2>Riwayat Kehadiran</h2>
+    <div id="riwayatContainer">
+      <!-- Tabel riwayat kehadiran akan di-render di sini -->
+    </div>
+  </div>
+
+  <script>
+    // Fungsi untuk memuat dan menampilkan riwayat kehadiran
+    window.onload = function() {
+      const riwayatContainer = document.getElementById('riwayatContainer');
+      const rekamanKehadiran = JSON.parse(localStorage.getItem('rekamanKehadiran')) || [];
+
+      if (rekamanKehadiran.length === 0) {
+        riwayatContainer.innerHTML = `<p class="no-data">Belum ada riwayat kehadiran yang disimpan.</p>`;
+        return;
+      }
+
+      // Membuat tabel riwayat kehadiran
+      const table = document.createElement('table');
+
+      // Header tabel
+      const thead = document.createElement('thead');
+      thead.innerHTML = `
+        <tr>
+          <th>Tanggal</th>
+          <th>Ringkasan Kehadiran</th>
+          <th>Aksi</th> <!-- Kolom aksi -->
+        </tr>
+      `;
+      table.appendChild(thead);
+
+      // Body tabel
+      const tbody = document.createElement('tbody');
+      rekamanKehadiran.forEach((rekaman, index) => {
+        const tanggal = new Date(rekaman.waktu).toLocaleDateString('id-ID', {
+          weekday: 'long',
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+        });
+
+        const hadirCount = rekaman.data.filter(m => m.status === 'Hadir').length;
+        const alpaCount = rekaman.data.filter(m => m.status === 'Alpa').length;
+        const total = rekaman.data.length;
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${tanggal}</td>
+          <td class="summary">
+            Hadir: ${hadirCount}<br>
+            Alpa: ${alpaCount}<br>
+            Total: ${total} mahasiswa
+          </td>
+          <td><button class="delete-btn" onclick="hapusRiwayat(${index})">Hapus</button></td> <!-- Tombol hapus -->
+        `;
+        tbody.appendChild(row);
+      });
+      table.appendChild(tbody);
+
+      // Menambahkan tabel ke container
+      riwayatContainer.appendChild(table);
+    };
+
+    // Fungsi untuk menghapus riwayat kehadiran
+    function hapusRiwayat(index) {
+      const rekamanKehadiran = JSON.parse(localStorage.getItem('rekamanKehadiran')) || [];
+      rekamanKehadiran.splice(index, 1); // Menghapus item berdasarkan index
+      localStorage.setItem('rekamanKehadiran', JSON.stringify(rekamanKehadiran));
+      window.location.reload(); // Memuat ulang halaman untuk menampilkan data yang sudah diperbarui
+    }
+  </script>
+</body>
+</html>
